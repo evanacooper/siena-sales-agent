@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siena AI Sales Agent - Feature Overview</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        :root {
+            --siena-black: #121212;
+            --siena-dark-gray: #1a1a1a;
+            --siena-lime: #dbff00;
+            --siena-green: #c0ff00;
+            --siena-white: #ffffff;
+            --siena-light-gray: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--siena-white);
+            background-color: var(--siena-black);
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3.2em;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 2em;
+            padding-bottom: 5px;
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--siena-lime);
+        }
+        
+        h3 {
+            margin-top: 30px;
+            font-size: 1.5em;
+            color: var(--siena-lime);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.4em;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .carousel-container {
+            width: 100%;
+            margin: 40px auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 500px;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .carousel-img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 450px;
+            width: 100%;
+            background-color: var(--siena-dark-gray);
+            position: relative;
+        }
+        
+        .carousel-img img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .image-container {
+            position: relative;
+        }
+        
+        .expand-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: var(--siena-lime);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 15;
+            transition: background-color 0.3s;
+        }
+        
+        .expand-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: var(--siena-lime);
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .carousel-caption {
+            text-align: center;
+            padding: 15px;
+            font-style: normal;
+            color: var(--siena-lime);
+            font-weight: 500;
+        }
+        
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #555;
+            margin: 0 6px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background-color: var(--siena-lime);
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.6);
+            color: var(--siena-lime);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .prev {
+            left: 15px;
+        }
+        
+        .next {
+            right: 15px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: var(--siena-dark-gray);
+            padding: 30px;
+            border-radius: 12px;
+        }
+        
+        ul {
+            padding-left: 20px;
+            list-style-type: none;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 28px;
+        }
+        
+        li:before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: var(--siena-lime);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid #333;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--siena-lime);
+            color: var(--siena-black);
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(219, 255, 0, 0.2);
+        }
+        
+        .logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="siena_logo.png" alt="Siena Logo" class="logo">
+    </div>
+    <h1>Siena AI Sales Agent</h1>
+    <div class="subtitle">Turn conversations into revenue.</div>
+    
+    <div class="carousel-container">
+        <div class="carousel">
+            <div class="carousel-item">
+                <div class="carousel-img">
+                    <button class="expand-btn">⤢</button>
+                    <img src="embedded_search.png" alt="Sales Assistant Integration">
+                </div>
+                <div class="carousel-caption">Embed product expertise anywhere your customers are.</div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-img">
+                    <button class="expand-btn">⤢</button>
+                    <img src="chat_modal.png" alt="Contextual Product Queries">
+                </div>
+                <div class="carousel-caption">Multiple chat experiences to let you customers engage.</div>
+            </div>
+            <div class="carousel-item">
+                <div class="carousel-img">
+                    <button class="expand-btn">⤢</button>
+                    <img src="chat_panel.png" alt="AI Clientelling Panel">
+                </div>
+                <div class="carousel-caption">Rich product cards and add to cart from chat.</div>
+            </div>
+        </div>
+        <button class="carousel-btn prev">&#10094;</button>
+        <button class="carousel-btn next">&#10095;</button>
+        <div class="carousel-nav">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Key Sales Agent Functionality</h2>
+        
+        <h3>Intelligent Product Knowledge</h3>
+        <p>Connect your Shopify product catalog, your website, and any other sources. These are the exact same sources you use for customer support so you don't need to maintain information in two places. Sales Agent then automatically indexes this information and uses it to answer product questions and make recommendations, no training or writing of automations needed.</p>
+        <p>Sales Agent has access to more than just product data, though. It can use past orders, customer memories, and prior conversations to personalize answers and recommendations for your customers.</p>
+        
+        <h3>Generating Revenue from Customer Interactions</h3>
+        <p>Encourage your customers to engage with you and your products, creating revenue generating opportunities with every conversation. Siena's AI-generated product questions, which we call Conversation Starters, will prompt your customers to start a conversation by surfacing common product questions. This lowers the friction to starting a conversation. From here, Sales Agent will expertly answer their questions. But customers are not limited to these Conversation Starters. They can ask any product questions they have.</p>
+        
+        <h3>Increase Discoverability for More Conversations</h3>
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+            <div style="flex: 1;">
+                <p>Deploy the Sales Agent across multiple touchpoints with our Web Widgets framework, offering various chat discoverability types and chat interfaces:</p>
+                <ul>
+                    <li><strong>Embedded Product Search:</strong> Embedded UI with product-focused prompts that you can embed anywhere on your site product pages</li>
+                    <li><strong>Chat Button:</strong> Traditional corner button that launches a chat interface</li>
+                    <li><strong>Floating Search Bar:</strong> A search bar that "floats" at the bottom of your site and launches the chat window</li>
+                </ul>
+                <p>You can mix and match these discoverability options to suit your needs and provide the right experience for your customers anywhere on your site.</p>
+            </div>
+            <div style="flex: 0.8; min-height: 300px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--siena-lime); border-radius: 8px; background-color: rgba(0,0,0,0.2); padding: 10px;" class="image-container">
+                <button class="expand-btn">⤢</button>
+                <img src="mobile_expert.png" alt="Discoverability Options" style="max-width: 100%; max-height: 400px; object-fit: contain;">
+            </div>
+        </div>
+        
+        <h3>Rich Product Cards With Add to Cart</h3>
+        <p>Deliver engaging product cards with images, descriptions, and pricing in Siena's native Live Chat. This includes direct "Add to Cart" functionality for Shopify so that customers can start their purchase directly within their conversation.</p>
+        
+        <h3>Unified Customer Journey</h3>
+        <p>The Siena Sales Agent bridges pre-purchase and post-purchase experiences, creating a seamless customer journey. You can use the live chat widget as a standalone sales and product experience, but all of Siena's support capabilities can also be delivered through the same interface if you choose to enable those automations. For example, you can automatically processes returns or exchanges while identifying new sales opportunities or recommendations for a replacement. Additionally, Sales Agent recommendations can be delivered through any channel you support today, be it email or SMS in addition to live chat.</p>
+    </div>
+
+    <div class="section">
+        <h2>Additional Platform Capabilities</h2>
+        
+        <h3>Robust and Centralized Knowledge Base</h3>
+        <p>Leverage the same comprehensive knowledge foundation that powers your existing CX channels. Our unified knowledge architecture ensures consistent information delivery across all customer touchpoints, eliminating silos and reducing maintenance overhead while providing a seamless transition between support and sales interactions.</p>
+        
+        <h3>QA Platform</h3>
+        <div style="display: flex; gap: 30px; align-items: flex-start;">
+            <div style="flex: 1;">
+                <p>Ensure top-tier performance with our integrated quality assurance tools:</p>
+                <ul>
+                    <li><strong>Test Run:</strong> Use AI to generate sample conversations to test different scenarios and make adjustments before launching to customers.</li>
+                    <li><strong>Playground:</strong> Chat with Siena just like your customers would to ensure every experience is just what you havd in mind.</li>
+                    <li><strong>Comprehensive Analytics:</strong> Track customer experience across conversations and topics and analyze the efficacy of your automations.</li>
+                </ul>
+            </div>
+            <div style="flex: 0.8; min-height: 300px; display: flex; justify-content: center; align-items: center; border: 2px solid var(--siena-lime); border-radius: 8px; background-color: rgba(0,0,0,0.2); padding: 10px;" class="image-container">
+                <button class="expand-btn">⤢</button>
+                <img src="test_run.png" alt="QA Platform Interface" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+        </div>
+        
+        <h3>Brand Voice Customization</h3>
+        <p>Maintain your unique brand identity with customizable personas:</p>
+        <ul>
+            <li>Tailor communication style by channel, with specialized personas for different contexts.</li>
+            <li>Ensure consistent brand representation across support and sales interactions.</li>
+        </ul>
+    </div>
+
+    <div class="footer">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const carousel = document.querySelector('.carousel');
+            const items = document.querySelectorAll('.carousel-item');
+            const dots = document.querySelectorAll('.carousel-dot');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            let currentIndex = 0;
+            const totalItems = items.length;
+
+            // Initialize
+            updateCarousel();
+
+            // Event listeners
+            prevBtn.addEventListener('click', function() {
+                currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+                updateCarousel();
+            });
+
+            nextBtn.addEventListener('click', function() {
+                currentIndex = (currentIndex + 1) % totalItems;
+                updateCarousel();
+            });
+
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', function() {
+                    currentIndex = index;
+                    updateCarousel();
+                });
+            });
+
+            function updateCarousel() {
+                carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Update active dot
+                dots.forEach((dot, index) => {
+                    if (index === currentIndex) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Image expansion functionality for all images
+            const expandButtons = document.querySelectorAll('.expand-btn');
+            const imageContainers = document.querySelectorAll('.carousel-img, .image-container');
+            
+            // Function to create and show modal
+            function showImageModal(img) {
+                // Create modal
+                const modal = document.createElement('div');
+                modal.className = 'image-modal';
+                modal.innerHTML = `
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <img src="${img.src}" alt="${img.alt}">
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                document.body.style.overflow = 'hidden';
+                
+                // Close modal event
+                modal.querySelector('.close-modal').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                    document.body.style.overflow = 'auto';
+                });
+                
+                // Click outside to close
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        document.body.removeChild(modal);
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+            
+            // Add click event to expand buttons
+            expandButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const imgContainer = this.closest('.carousel-img, .image-container');
+                    const img = imgContainer.querySelector('img');
+                    showImageModal(img);
+                });
+            });
+            
+            // Add click event to images themselves
+            imageContainers.forEach(container => {
+                const img = container.querySelector('img');
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    showImageModal(this);
+                });
+                
+                // Make the images appear clickable with a pointer cursor
+                img.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
